@@ -7,9 +7,10 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @Service
-class AdminBookService (
+class AdminBookService(
     private val bookRepository: BookRepository
-){
+) {
+
     @Transactional
     fun register(book: Book){
         bookRepository.findWithRental(book.id)?.let{
