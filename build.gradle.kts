@@ -6,6 +6,10 @@ plugins {
 	id("com.arenagod.gradle.MybatisGenerator") version "1.4"
 	kotlin("jvm") version "1.6.10"
 	kotlin("plugin.spring") version "1.6.10"
+
+	// for OpenAPI
+	id("org.openapi.generator") version "5.3.0"
+
 }
 
 group = "com.book.manager"
@@ -46,6 +50,18 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+// Builds a Kotlin Server by OpenAPI
+tasks.withType<org.openapitools.generator.gradle.plugin.tasks.GenerateTask> {
+	generatorName.set("kotlin-spring")
+	inputSpec.set("$rootDir/openapi/api.yaml")
+	outputDir.set("$buildDir")
+	apiPackage.set("com/book/manager/presentation/controller")
+	// https://github.com/spring-projects/spring-framework/issues/23499
+	configOptions.set(mapOf(
+		"interfaceOnly" to "true"
+	))
 }
 
 mybatisGenerator {

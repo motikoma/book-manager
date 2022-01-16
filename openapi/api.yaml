@@ -1,0 +1,120 @@
+openapi: "3.0.2"
+info:
+  title: book manager API
+  description: ""
+  version: "1.0"
+servers:
+  - url: http://localhost:8080/api/v1
+    description: book manager API
+    variables:
+      api_version:
+        default: "v1"
+        enum:
+          - "v1"
+paths:
+  /health:
+    get:
+      tags:
+        - health
+      summary: Health check
+      description: ""
+      deprecated: false
+      responses:
+        "200":
+          description: ヘルスチェック
+          content:
+            application/json:
+              schema:
+                $ref: ./components/schema/get_health_response.yaml
+  /register:
+    post:
+      tags:
+        - AdminBook
+      summary: "書籍の登録"
+      description: ""
+      deprecated: false
+      requestBody:
+        description: ""
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: "書籍ID"
+                  example: "1"
+                title:
+                  type: string
+                  description: "書籍名"
+                  example: "銀河鉄道の夜"
+                author:
+                  type: string
+                  description: "著者"
+                  example: "太宰治"
+                releaseDate:
+                  type: string
+                  description: "発売日"
+                  example: "2019-01-01"
+      responses:
+        '200':
+          description: 書籍の登録成功
+          content:
+            application/json:
+              schema:
+                  type: object
+  /update:
+    post:
+      tags:
+        - AdminBook
+      summary: "書籍の更新"
+      description: ""
+      deprecated: false
+      requestBody:
+        description: ""
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: "書籍ID"
+                  example: "1"
+                title:
+                  type: string
+                  description: "書籍名"
+                  example: "銀河鉄道の夜"
+                author:
+                  type: string
+                  description: "著者"
+                  example: "太宰治"
+                releaseDate:
+                  type: string
+                  description: "発売日"
+                  example: "2019-01-01"
+      responses:
+        '200':
+          description: 書籍の更新成功
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          description: 書籍の更新失敗
+          content:
+            application/json:
+              schema:
+                type:
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Application-Authorization
+
+security:
+  - ApiKeyAuth: [client]
