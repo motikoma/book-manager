@@ -32,8 +32,8 @@ class AdminBookController(
         )
     }
 
-    @DeleteMapping("/delete")
-    fun delete(@RequestBody request: DeleteBookRequest){
-        adminBookService.delete(request.id)
+    @DeleteMapping("/delete/{book_id}")
+    fun delete(@PathVariable("book_id") bookId: Long){
+        adminBookService.delete(bookId)
     }
 }
