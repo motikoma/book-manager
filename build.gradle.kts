@@ -33,6 +33,7 @@ dependencies {
 	implementation("org.springframework.session:spring-session-data-redis")
 	implementation("redis.clients:jedis")
 	implementation("org.springframework.boot:spring-boot-starter-aop")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 	mybatisGenerator("org.mybatis.generator:mybatis-generator-core:1.4.0")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.junit.jupiter:junit-jupiter-engine:5.7.1")
@@ -52,16 +53,54 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
+tasks.register("moveOpenApiGeneratedCode") {
+
+	val controllerPath = "src/main/kotlin/com/book/manager/presentation/generated/controller"
+	val modelPath = "src/main/kotlin/com/book/manager/presentation/generated/model"
+
+	doLast {
+		// controller
+		copy {
+			from("$buildDir/generated/src/main/kotlin/com/book/manager/controller")
+			into(controllerPath)
+		}
+
+		// model
+		copy {
+			from("$buildDir/generated/src/main/kotlin/com/book/manager/model")
+			into(modelPath)
+		}
+	}
+}
+
+
 // Builds a Kotlin Server by OpenAPI
 tasks.withType<org.openapitools.generator.gradle.plugin.tasks.GenerateTask> {
 	generatorName.set("kotlin-spring")
 	inputSpec.set("$rootDir/openapi/api.yaml")
-	outputDir.set("$buildDir")
-	apiPackage.set("com/book/manager/presentation/controller")
-	// https://github.com/spring-projects/spring-framework/issues/23499
+	outputDir.set("$buildDir/generated")
+	apiPackage.set("com.book.manager.controller")
+	invokerPackage.set("com.book.manager.invoker")
+	modelPackage.set("com.book.manager.model")
 	configOptions.set(mapOf(
-		"interfaceOnly" to "true"
+		"serviceInterface" to "true",
+		"serializableModel" to "true",
+		"useBeanValidation" to "false",
+		"modelMutable" to "true",
+		"interfaceOnly" to "false"
 	))
+	globalProperties.set(mapOf("modelDocs" to "false"))
+	skipValidateSpec.set(true)
+	logToStderr.set(true)
+	generateAliasAsModel.set(false)
+	// set to true and set environment variable {LANG}_POST_PROCESS_FILE
+	// (e.g. SCALA_POST_PROCESS_FILE) to the linter/formatter to be processed.
+	// This command will be passed one file at a time for most supported post processors.
+	enablePostProcessFile.set(false)
+	finalizedBy("moveOpenApiGeneratedCode")
+
+	outputs.upToDateWhen { false }
+	outputs.cacheIf { false }
 }
 
 mybatisGenerator {

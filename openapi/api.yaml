@@ -12,25 +12,12 @@ servers:
         enum:
           - "v1"
 paths:
-  /health:
-    get:
-      tags:
-        - health
-      summary: Health check
-      description: ""
-      deprecated: false
-      responses:
-        "200":
-          description: ヘルスチェック
-          content:
-            application/json:
-              schema:
-                $ref: ./components/schema/get_health_response.yaml
-  /register:
+  /admin/book/register:
     post:
       tags:
         - AdminBook
       summary: "書籍の登録"
+      operationId: adminBookRegister
       description: ""
       deprecated: false
       requestBody:
@@ -39,36 +26,21 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                id:
-                  type: integer
-                  description: "書籍ID"
-                  example: "1"
-                title:
-                  type: string
-                  description: "書籍名"
-                  example: "銀河鉄道の夜"
-                author:
-                  type: string
-                  description: "著者"
-                  example: "太宰治"
-                releaseDate:
-                  type: string
-                  description: "発売日"
-                  example: "2019-01-01"
+              $ref: ./components/schema/model/book.yaml
       responses:
         '200':
           description: 書籍の登録成功
           content:
             application/json:
               schema:
-                  type: object
-  /update:
-    post:
+                type: object
+                properties: {}
+  /admin/book/update:
+    put:
       tags:
         - AdminBook
       summary: "書籍の更新"
+      operationId: update
       description: ""
       deprecated: false
       requestBody:
@@ -77,24 +49,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                id:
-                  type: integer
-                  description: "書籍ID"
-                  example: "1"
-                title:
-                  type: string
-                  description: "書籍名"
-                  example: "銀河鉄道の夜"
-                author:
-                  type: string
-                  description: "著者"
-                  example: "太宰治"
-                releaseDate:
-                  type: string
-                  description: "発売日"
-                  example: "2019-01-01"
+              $ref: ./components/schema/model/book.yaml
       responses:
         '200':
           description: 書籍の更新成功
@@ -102,12 +57,49 @@ paths:
             application/json:
               schema:
                 type: object
+                properties: {}
         '500':
           description: 書籍の更新失敗
           content:
             application/json:
               schema:
-                type:
+                type: object
+                properties: {}
+  /admin/book/delete:
+    delete:
+      tags:
+        - AdminBook
+      summary: "書籍の削除"
+      operationId: delete
+      description: ""
+      deprecated: false
+      requestBody:
+        description: ""
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: 書籍ID
+      responses:
+        '200':
+          description: 書籍の削除成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+        '500':
+          description: 書籍の削除失敗
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+
 
 components:
   securitySchemes:

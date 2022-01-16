@@ -1,0 +1,18 @@
+type: object
+properties:
+  id:
+    type: integer
+    description: "書籍ID"
+    example: "1"
+  title:
+    type: string
+    description: "書籍名"
+    example: "銀河鉄道の夜"
+  author:
+    type: string
+    description: "著者"
+    example: "太宰治"
+  releaseDate:
+    type: string
+    description: "発売日"
+    example: "2019-01-01"
