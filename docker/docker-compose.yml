@@ -9,6 +9,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: mysql
       command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    platform: linux/amd64
     volumes:
       - ./db/data:/var/lib/mysql
       - ./db/my.cnf:/etc/mysql/conf.d/my.cnf
